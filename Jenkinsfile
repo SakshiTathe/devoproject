@@ -22,7 +22,12 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl set image deployment/go-app go-app=sakshi2004docker/goapp:latest'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                sh '''
+                    kubectl set image deployment/go-app go-app=sakshi2004docker/goapp:latest -n default
+                      kubectl rollout status deployment/go-app -n default
+                '''
+                }
             }
         }
     }
