@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'jenkins-kubeconfig', variable: 'KUBECONFIG')]) {
                 sh '''
                     kubectl set image deployment/go-app go-app=sakshi2004docker/goapp:latest -n default
                       kubectl rollout status deployment/go-app -n default
