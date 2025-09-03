@@ -24,8 +24,12 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'jenkins-kubeconfig', variable: 'KUBECONFIG')]) {
                 sh '''
-                    kubectl set image deployment/go-app go-app=sakshi2004docker/goapp:latest -n default
-                      kubectl rollout status deployment/go-app -n default
+                 export KUBECONFIG=$KUBECONFIG
+                helm upgrade --install goapp ./goapp-chart \
+                  --namespace default --create-namespace \
+                  --set image.repository=sakshi2004docker/goapp \
+                  --set image.tag=latest
+                kubectl rollout status deployment/goapp -n default
                 '''
                 }
             }
